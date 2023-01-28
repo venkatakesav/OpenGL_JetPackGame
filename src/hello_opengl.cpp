@@ -117,10 +117,10 @@ int main()
     /*Code For Character*/
     float vertices_1[] = {
         // Position (x, y, z)  //Colors (arbitrary)  //Textures(x, y)
-        -0.80f, -0.73f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+        -0.80f, -0.60f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
         -0.80f, -0.93f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
         -0.90f, -0.93f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-        -0.90f, -0.73f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
+        -0.90f, -0.60f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
     unsigned int indices_1[] = {
         0, 1, 3, // second triangle
         1, 2, 3 // first triangle
@@ -163,7 +163,7 @@ int main()
     // load image, create texture and generate mipmaps
     // int width, height, nrChannels;
     char path_1[100];
-    strcpy(path_1, "src/components/character/H1.png");
+    strcpy(path_1, "src/components/character/H1_F.png");
     // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
     unsigned char *data_1 = stbi_load(path_1, &width, &height, &nrChannels, 0);
     if (data_1)
@@ -227,6 +227,10 @@ int main()
 
         /*Render BackGround Complete*/
         /*Render Character*/
+
+        transform = glm::mat4(1.0f);
+        transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
         glBindTexture(GL_TEXTURE_2D, texture_1);
 
