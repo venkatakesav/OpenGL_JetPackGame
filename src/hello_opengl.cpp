@@ -14,6 +14,7 @@
 #include "./components/background/background.cpp"
 #include "./components/character/character.cpp"
 
+
 // void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 void Physics_Engine();
@@ -24,8 +25,14 @@ int count = 0;
 
 /*Initial Elevation*/
 float in_el = 0;
+/*JetPack Off*/
 int jet = 0;
-int ticks = 0; 
+/*Number of moments of Upward acc*/
+int up_ticks = 0; 
+/*Number of moments of Downward acc*/
+int down_ticks = 0; 
+/*Velocity = 0*/
+float vel = 0; 
 
 int main()
 {
@@ -90,10 +97,10 @@ int main()
         // /*Render Character*/----------------------------------------------------------------
         transform = glm::mat4(1.0f);
         // /*Physics Engine*/------------------------------------------------------------------
-        std::cout << "JetPack is " << jet << std::endl;
+        // std::cout << "JetPack is " << jet << std::endl;
         Physics_Engine();
         transform = glm::translate(transform, glm::vec3(0.0f, in_el, 0.0f));
-        std::cout << "Elevation is " << in_el << std::endl;
+        // std::cout << "Elevation is " << in_el << std::endl;
 
         // /*Physics Engine -> End*/------------------------------------------------------------------
         transformLoc = glGetUniformLocation(ourShader.ID, "transform");
@@ -131,12 +138,18 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
     if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
     {
-        std::cout << "1 Pressed" << std::endl;
+        // std::cout << "1 Pressed" << std::endl;
         jet = 1;
+        up_ticks++;
+        down_ticks = 0; 
+        std:: cout << "Up Ticks: "<< up_ticks << std:: endl;
     }
     else
     {
         jet = 0;
+        up_ticks = 0; 
+        down_ticks++;
+        std:: cout << "Down Ticks: "<< down_ticks << std:: endl;
     }
 }
 
@@ -146,24 +159,36 @@ void Physics_Engine()
 
     if (jet == 1)
     {
-        if (in_el < 1.6)
+        if (in_el <= 1.6 && in_el >= 0.0f)
         {
-            in_el = 0.01f + in_el; // Basically hover over the ground
+            in_el = in_el + vel*(up_ticks) +0.0000005*(up_ticks)*(up_ticks); // Basically hover over the ground
+            vel = vel + 0.0000010*(up_ticks);
         }
-        else if (in_el >= 1.6f)
+        else if (in_el > 1.6f)
         {
             in_el = 1.6f;
+            up_ticks = 0; 
+            vel = 0; 
+        }else if(in_el < 0.0f){
+            in_el = 0; 
+            vel = 0;
         }
     }
     else
     {
-        if (jet == 0 && in_el > 0)
+        if (in_el >= 0 && in_el <= 1.6f)
         {
-            in_el = in_el - 0.01f;
+            in_el = in_el + vel*(down_ticks) - 0.00000025*(down_ticks)*(down_ticks); // Basically hover over the ground
+            vel = vel - 0.0000005*(down_ticks);
         }
-        else if (jet == 0 && in_el <= 0)
+        else if (in_el < 0)
         {
             in_el = 0;
+            down_ticks = 0;
+            vel = 0; 
+        }else if(in_el > 1.6f){
+            in_el = 1.6f; 
+            vel = 0;
         }
     }
 }
