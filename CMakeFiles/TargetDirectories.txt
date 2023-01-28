@@ -1,0 +1,9 @@
+/home/venkata/Sem4/CG_New/Spring2023-CG-Resources-main/Boilerplate2023/CMakeFiles/rebuild_cache.dir
+/home/venkata/Sem4/CG_New/Spring2023-CG-Resources-main/Boilerplate2023/CMakeFiles/edit_cache.dir
+/home/venkata/Sem4/CG_New/Spring2023-CG-Resources-main/Boilerplate2023/CMakeFiles/glad.dir
+/home/venkata/Sem4/CG_New/Spring2023-CG-Resources-main/Boilerplate2023/CMakeFiles/app.dir
+/home/venkata/Sem4/CG_New/Spring2023-CG-Resources-main/Boilerplate2023/libraries/glfw/CMakeFiles/rebuild_cache.dir
+/home/venkata/Sem4/CG_New/Spring2023-CG-Resources-main/Boilerplate2023/libraries/glfw/CMakeFiles/edit_cache.dir
+/home/venkata/Sem4/CG_New/Spring2023-CG-Resources-main/Boilerplate2023/libraries/glfw/src/CMakeFiles/rebuild_cache.dir
+/home/venkata/Sem4/CG_New/Spring2023-CG-Resources-main/Boilerplate2023/libraries/glfw/src/CMakeFiles/edit_cache.dir
+/home/venkata/Sem4/CG_New/Spring2023-CG-Resources-main/Boilerplate2023/libraries/glfw/src/CMakeFiles/glfw.dir
