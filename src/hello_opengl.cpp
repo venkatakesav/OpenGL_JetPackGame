@@ -14,14 +14,18 @@
 #include "./components/background/background.cpp"
 #include "./components/character/character.cpp"
 
-
 // void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
+void Physics_Engine();
 
 int new_Time = 0;
 int flag = 0;
-
 int count = 0;
+
+/*Initial Elevation*/
+float in_el = 0;
+int jet = 0;
+int ticks = 0; 
 
 int main()
 {
@@ -30,19 +34,18 @@ int main()
     // build and compile our shader program
     // ------------------------------------
     Shader ourShader("src/shaders/shader.vs", "src/shaders/shader.fs"); // you can name your shader files however you like
-    
+
     back_init();
     character_init();
-    
 
     // render loop
     // ----------- For Level -1 ------------
     while (!glfwWindowShouldClose(window) && count < 10)
     {
+        // Initially Pressed or not ->
         // input
         // -----
         processInput(window);
-
         // render
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -85,8 +88,14 @@ int main()
 
         // /*Render BackGround Complete*/------------------------------------------------------
         // /*Render Character*/----------------------------------------------------------------
-
         transform = glm::mat4(1.0f);
+        // /*Physics Engine*/------------------------------------------------------------------
+        std::cout << "JetPack is " << jet << std::endl;
+        Physics_Engine();
+        transform = glm::translate(transform, glm::vec3(0.0f, in_el, 0.0f));
+        std::cout << "Elevation is " << in_el << std::endl;
+
+        // /*Physics Engine -> End*/------------------------------------------------------------------
         transformLoc = glGetUniformLocation(ourShader.ID, "transform");
         glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
@@ -95,8 +104,6 @@ int main()
         glBindVertexArray(VAO_1);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // /*Rendering Character Complete*/----------------------------------------------------------------
-
-
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -122,4 +129,41 @@ void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+    {
+        std::cout << "1 Pressed" << std::endl;
+        jet = 1;
+    }
+    else
+    {
+        jet = 0;
+    }
+}
+
+void Physics_Engine()
+{
+    // Case 1 if Jet is active and player is on ground
+
+    if (jet == 1)
+    {
+        if (in_el < 1.6)
+        {
+            in_el = 0.01f + in_el; // Basically hover over the ground
+        }
+        else if (in_el >= 1.6f)
+        {
+            in_el = 1.6f;
+        }
+    }
+    else
+    {
+        if (jet == 0 && in_el > 0)
+        {
+            in_el = in_el - 0.01f;
+        }
+        else if (jet == 0 && in_el <= 0)
+        {
+            in_el = 0;
+        }
+    }
 }

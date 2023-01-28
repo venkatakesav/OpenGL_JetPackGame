@@ -25,6 +25,7 @@ unsigned int indices_1[] = {
 unsigned int VBO_1, VAO_1, EBO_1;
 unsigned int texture_1;
 
+
 void character_init()
 {
 
