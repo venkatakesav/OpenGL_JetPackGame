@@ -11,6 +11,8 @@
 #include <stb_image.h>
 #endif
 
+int level = 1;
+
 unsigned int VBO, VAO, EBO;
 int width, height, nrChannels;
 unsigned int texture;
@@ -101,8 +103,85 @@ void back_init()
     stbi_image_free(data);
 }
 
+void ChangeBackGround()
+{
+    stbi_set_flip_vertically_on_load(true);
+    if (2 < count && count < 5)
+    {
+        if (level != 2)
+        {
+            std::cout << "Count - 2" << std::endl;
+            glGenTextures(1, &texture);
+            glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+            // set the texture wrapping parameters
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // set texture wrapping to GL_REPEAT (default wrapping method)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            // set texture filtering parameters
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            char path[100];
+            strcpy(path, "src/components/background/H4.png");
+            unsigned char *data = stbi_load(path, &width, &height, &nrChannels, 0);
+            if (data)
+            {
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+                glGenerateMipmap(GL_TEXTURE_2D);
+            }
+            else
+            {
+                std::cout << "Failed to load texture" << std::endl;
+            }
+            stbi_image_free(data);
+            level = 2;
+        }
+        else
+        {
+            return;
+        }
+    }
+    else if (5 <= count)
+    {
+        if (level != 3)
+        {
+            std::cout << "Count - 4" << std::endl;
+            glGenTextures(1, &texture);
+            glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+            // set the texture wrapping parameters
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // set texture wrapping to GL_REPEAT (default wrapping method)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            // set texture filtering parameters
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            char path[100];
+            strcpy(path, "src/components/background/H3.png");
+            stbi_set_flip_vertically_on_load(true);
+            unsigned char *data = stbi_load(path, &width, &height, &nrChannels, 0);
+            if (data)
+            {
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+                glGenerateMipmap(GL_TEXTURE_2D);
+            }
+            else
+            {
+                std::cout << "Failed to load texture" << std::endl;
+            }
+            stbi_image_free(data);
+            level = 3;
+        }
+        else
+        {
+            return;
+        }
+    }
+    else
+    {
+        return;
+    }
+}
+
 void RenderBackground()
 {
+    ChangeBackGround();
     // bind Texture
     glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -111,10 +190,23 @@ void RenderBackground()
     if (new_Time < 100)
     {
         // Create Transformations
-        transform = glm::translate(transform, glm::vec3(float(-0.0033 * new_Time), 0.0f, 0.0f));
+        transform = glm::translate(transform, glm::vec3(float(-0.0066 * new_Time), 0.0f, 0.0f));
         // std:: cout << "X Coordinate is: " << -0.0033*new_Time << std::endl;
         // usleep(100);
-        new_Time++;
+        if (count < 2)
+        {
+            new_Time++;
+        }
+        else if (count >= 2 && count < 5)
+        {
+            std::cout << "Level - 2" << std::endl;
+            new_Time = new_Time + 2;
+        }
+        else
+        {
+            std::cout << "Level - 3" << std::endl;
+            new_Time = new_Time + 4;
+        }
     }
     else if (flag == 1)
     {
@@ -126,7 +218,7 @@ void RenderBackground()
     if (new_Time == 100)
     {
         flag = 1;
-        usleep(10000);
+        // usleep(10000);
     }
 }
 
