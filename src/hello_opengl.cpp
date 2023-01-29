@@ -14,25 +14,26 @@
 #include "./components/background/background.cpp"
 #include "./components/character/character.cpp"
 
-
 // void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 void Physics_Engine();
-
-int new_Time = 0;
-int flag = 0;
-int count = 0;
 
 /*Initial Elevation*/
 float in_el = 0;
 /*JetPack Off*/
 int jet = 0;
 /*Number of moments of Upward acc*/
-int up_ticks = 0; 
+int up_ticks = 0;
 /*Number of moments of Downward acc*/
-int down_ticks = 0; 
+int down_ticks = 0;
 /*Velocity = 0*/
-float vel = 0; 
+float vel = 0;
+
+void bind_transformation(Shader *ourShader)
+{
+    unsigned int transformLoc = glGetUniformLocation((*ourShader).ID, "transform");
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+}
 
 int main()
 {
@@ -57,41 +58,12 @@ int main()
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
         // render container
         ourShader.use();
-
-        // bind Texture
-        glBindTexture(GL_TEXTURE_2D, texture);
-
-        // /*Render The BackGround*/------------------------------------------------------
-        glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-
-        if (new_Time < 100)
-        {
-            // Create Transformations
-            transform = glm::translate(transform, glm::vec3(float(-0.0033 * new_Time), 0.0f, 0.0f));
-            // std:: cout << "X Coordinate is: " << -0.0033*new_Time << std::endl;
-            // usleep(100);
-            new_Time++;
-        }
-        else if (flag == 1)
-        {
-            transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
-            new_Time = 0;
-            count++;
-        }
-
-        if (new_Time == 100)
-        {
-            flag = 1;
-            usleep(10000);
-        }
-
-        unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
+        RenderBackground();
+        bind_transformation(&ourShader);
+        render_back_main();
 
         // /*Render BackGround Complete*/------------------------------------------------------
         // /*Render Character*/----------------------------------------------------------------
@@ -103,14 +75,18 @@ int main()
         // std::cout << "Elevation is " << in_el << std::endl;
 
         // /*Physics Engine -> End*/------------------------------------------------------------------
-        transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+        unsigned int transformLoc1 = glGetUniformLocation(ourShader.ID, "transform");
+        glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(transform));
 
         glBindTexture(GL_TEXTURE_2D, texture_1);
 
         glBindVertexArray(VAO_1);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // /*Rendering Character Complete*/----------------------------------------------------------------
+
+        /*Reset all the transformations to originals -------------------------------------------*/
+        transform = glm::mat4(1.0f);
+        /*Reset all the transformations to originals -------------------------------------------*/
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -141,15 +117,15 @@ void processInput(GLFWwindow *window)
         // std::cout << "1 Pressed" << std::endl;
         jet = 1;
         up_ticks++;
-        down_ticks = 0; 
-        std:: cout << "Up Ticks: "<< up_ticks << std:: endl;
+        down_ticks = 0;
+        std::cout << "Up Ticks: " << up_ticks << std::endl;
     }
     else
     {
         jet = 0;
-        up_ticks = 0; 
+        up_ticks = 0;
         down_ticks++;
-        std:: cout << "Down Ticks: "<< down_ticks << std:: endl;
+        std::cout << "Down Ticks: " << down_ticks << std::endl;
     }
 }
 
@@ -161,16 +137,18 @@ void Physics_Engine()
     {
         if (in_el <= 1.6 && in_el >= 0.0f)
         {
-            in_el = in_el + vel*(up_ticks) +0.0000005*(up_ticks)*(up_ticks); // Basically hover over the ground
-            vel = vel + 0.0000010*(up_ticks);
+            in_el = in_el + vel * (up_ticks) + 0.0000005 * (up_ticks) * (up_ticks); // Basically hover over the ground
+            vel = vel + 0.0000010 * (up_ticks);
         }
         else if (in_el > 1.6f)
         {
             in_el = 1.6f;
-            up_ticks = 0; 
-            vel = 0; 
-        }else if(in_el < 0.0f){
-            in_el = 0; 
+            up_ticks = 0;
+            vel = 0;
+        }
+        else if (in_el < 0.0f)
+        {
+            in_el = 0;
             vel = 0;
         }
     }
@@ -178,16 +156,18 @@ void Physics_Engine()
     {
         if (in_el >= 0 && in_el <= 1.6f)
         {
-            in_el = in_el + vel*(down_ticks) - 0.00000025*(down_ticks)*(down_ticks); // Basically hover over the ground
-            vel = vel - 0.0000005*(down_ticks);
+            in_el = in_el + vel * (down_ticks)-0.00000025 * (down_ticks) * (down_ticks); // Basically hover over the ground
+            vel = vel - 0.0000005 * (down_ticks);
         }
         else if (in_el < 0)
         {
             in_el = 0;
             down_ticks = 0;
-            vel = 0; 
-        }else if(in_el > 1.6f){
-            in_el = 1.6f; 
+            vel = 0;
+        }
+        else if (in_el > 1.6f)
+        {
+            in_el = 1.6f;
             vel = 0;
         }
     }

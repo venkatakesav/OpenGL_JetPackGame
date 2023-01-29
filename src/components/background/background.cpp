@@ -14,6 +14,11 @@
 unsigned int VBO, VAO, EBO;
 int width, height, nrChannels;
 unsigned int texture;
+glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+
+int new_Time = 0;
+int flag = 0;
+int count = 0;
 
 float vertices[] = {
     // positions          // colors           // texture coords
@@ -94,4 +99,39 @@ void back_init()
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
+}
+
+void RenderBackground()
+{
+    // bind Texture
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // /*Render The BackGround*/------------------------------------------------------
+
+    if (new_Time < 100)
+    {
+        // Create Transformations
+        transform = glm::translate(transform, glm::vec3(float(-0.0033 * new_Time), 0.0f, 0.0f));
+        // std:: cout << "X Coordinate is: " << -0.0033*new_Time << std::endl;
+        // usleep(100);
+        new_Time++;
+    }
+    else if (flag == 1)
+    {
+        transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
+        new_Time = 0;
+        count++;
+    }
+
+    if (new_Time == 100)
+    {
+        flag = 1;
+        usleep(10000);
+    }
+}
+
+void render_back_main()
+{
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
 }
