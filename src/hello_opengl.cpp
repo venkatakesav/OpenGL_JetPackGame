@@ -13,6 +13,7 @@
 
 #include "./components/background/background.cpp"
 #include "./components/character/character.cpp"
+#include "./components/zappers/zappers.cpp"
 
 // void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -33,6 +34,7 @@ int main()
 
     back_init();
     character_init();
+    zappers_init();
 
     // render loop
     // ----------- For Level -1 ------------
@@ -66,6 +68,19 @@ int main()
         bind_transformation(&ourShader);
         render_Img();
         // /*Rendering Character Complete*/----------------------------------------------------------------
+
+        // /*Render Zappers*/----------------------------------------------------------------
+        transform = glm::mat4(1.0f);
+        // /*Physics Engine*/------------------------------------------------------------------
+        // std::cout << "JetPack is " << jet << std::endl;
+        // Physics_Engine();
+        // transform = glm::translate(transform, glm::vec3(0.0f, in_el, 0.0f));
+        // std::cout << "Elevation is " << in_el << std::endl;
+
+        // /*Physics Engine -> End*/------------------------------------------------------------------
+        bind_transformation(&ourShader);
+        render_Zapper();
+        // /*Rendering Zappers*/---
 
         /*Reset all the transformations to originals -------------------------------------------*/
         transform = glm::mat4(1.0f);
@@ -111,4 +126,3 @@ void processInput(GLFWwindow *window)
         std::cout << "Down Ticks: " << down_ticks << std::endl;
     }
 }
-
