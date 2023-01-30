@@ -19,6 +19,7 @@ unsigned int texture;
 glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 
 int new_Time = 0;
+int new_Time_T = 0;
 int flag = 0;
 int count = 0;
 
@@ -106,7 +107,7 @@ void back_init()
 void ChangeBackGround()
 {
     stbi_set_flip_vertically_on_load(true);
-    if (2 < count && count < 5)
+    if (20 < count && count < 50)
     {
         if (level != 2)
         {
@@ -139,7 +140,7 @@ void ChangeBackGround()
             return;
         }
     }
-    else if (5 <= count)
+    else if (50 <= count)
     {
         if (level != 3)
         {
@@ -193,11 +194,12 @@ void RenderBackground()
         transform = glm::translate(transform, glm::vec3(float(-0.0066 * new_Time), 0.0f, 0.0f));
         // std:: cout << "X Coordinate is: " << -0.0033*new_Time << std::endl;
         // usleep(100);
-        if (count < 2)
+        if (count < 20)
         {
             new_Time++;
+            new_Time_T++;
         }
-        else if (count >= 2 && count < 5)
+        else if (count >= 20 && count < 50)
         {
             std::cout << "Level - 2" << std::endl;
             new_Time = new_Time + 2;

@@ -15,6 +15,9 @@
 #include "./components/character/character.cpp"
 #include "./components/zappers/zappers.cpp"
 
+float x_offset = 0; 
+float y_offset = 0; 
+
 // void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
@@ -38,7 +41,7 @@ int main()
 
     // render loop
     // ----------- For Level -1 ------------
-    while (!glfwWindowShouldClose(window) && count < 10)
+    while (!glfwWindowShouldClose(window) && count < 100)
     {
         // Initially Pressed or not ->
         // input
@@ -76,6 +79,18 @@ int main()
         // Physics_Engine();
         // transform = glm::translate(transform, glm::vec3(0.0f, in_el, 0.0f));
         // std::cout << "Elevation is " << in_el << std::endl;
+
+        transform = glm::translate(transform, glm::vec3(0.7f + float(-0.0066 * new_Time_T), y_offset, 0.0f));
+
+        if (-0.0066 * new_Time_T < -3)
+        {
+            std::cout << "Entered" << std::endl;
+            new_Time_T = 0;
+            x_offset = (float)rand()*0.3f/RAND_MAX;
+            y_offset = (float)rand()*0.7f/RAND_MAX - 0.35f;
+            std::cout << "x_offset" << x_offset << std::endl;
+            std::cout << "y_offset" << y_offset << std::endl;
+        }
 
         // /*Physics Engine -> End*/------------------------------------------------------------------
         bind_transformation(&ourShader);
@@ -123,6 +138,6 @@ void processInput(GLFWwindow *window)
         jet = 0;
         up_ticks = 0;
         down_ticks++;
-        std::cout << "Down Ticks: " << down_ticks << std::endl;
+        // std::cout << "Down Ticks: " << down_ticks << std::endl;
     }
 }
