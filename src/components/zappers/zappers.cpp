@@ -13,10 +13,10 @@
 
 float vertices_2[] = {
     // Position (x, y, z)  //Colors (arbitrary)  //Textures(x, y)
-    0.455f, 0.500f , 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+    0.455f, 0.500f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
     0.455f, -0.500f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
     0.345f, -0.500f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-    0.345f, 0.500f , 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
+    0.345f, 0.500f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
 unsigned int indices_2[] = {
     0, 1, 3, // second triangle
     1, 2, 3  // first triangle
@@ -25,7 +25,8 @@ unsigned int indices_2[] = {
 unsigned int VBO_2, VAO_2, EBO_2;
 unsigned int texture_2;
 
-void zappers_init(){
+void zappers_init()
+{
 
     glGenVertexArrays(1, &VAO_2);
     glGenBuffers(1, &VBO_2);
@@ -75,6 +76,31 @@ void zappers_init(){
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data_2);
+}
+
+void Zapper_Setup()
+{
+    transform = glm::translate(transform, glm::vec3(0.7f + float(-0.0066 * new_Time_T), y_offset, 0.0f));
+
+    if (-0.0066 * new_Time_T < -3)
+    {
+        // std::cout << "Entered" << std::endl;
+        new_Time_T = 0;
+        x_offset = (float)rand() * 0.3f / RAND_MAX;
+        y_offset = (float)rand() * 0.7f / RAND_MAX - 0.35f;
+        // std::cout << "x_offset" << x_offset << std::endl;
+        // std::cout << "y_offset" << y_offset << std::endl;
+        if (y_offset < 0)
+        {
+            // std::cout << "Horizontal Spawn" << std::endl;
+            // Make Horizontal equal to 1 -> That is The Current Zapper is going to be rotated by 90 degrees
+            flag_hor = 1;
+        }
+        else
+        {
+            flag_hor = 0;
+        }
+    }
 }
 
 void render_Zapper()
