@@ -201,13 +201,15 @@ void RenderBackground()
         }
         else if (count >= 20 && count < 50)
         {
-            std::cout << "Level - 2" << std::endl;
+            // std::cout << "Level - 2" << std::endl;
             new_Time = new_Time + 2;
+            new_Time_T = new_Time_T+2;
         }
         else
         {
-            std::cout << "Level - 3" << std::endl;
+            // std::cout << "Level - 3" << std::endl;
             new_Time = new_Time + 4;
+            new_Time_T = new_Time_T+4;
         }
     }
     else if (flag == 1)
