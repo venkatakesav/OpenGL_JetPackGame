@@ -11,12 +11,14 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <unistd.h>
 
+float x_offset = 0;
+float y_offset = 0;
+int flag_hor = 0;
+
 #include "./components/background/background.cpp"
 #include "./components/character/character.cpp"
 #include "./components/zappers/zappers.cpp"
-
-float x_offset = 0; 
-float y_offset = 0; 
+#include "./collission.cpp"
 
 // void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -79,23 +81,45 @@ int main()
         // Physics_Engine();
         // transform = glm::translate(transform, glm::vec3(0.0f, in_el, 0.0f));
         // std::cout << "Elevation is " << in_el << std::endl;
+        // transform = glm::translate(transform, glm::vec3(0.7f + float(-0.0066 * new_Time_T), y_offset, 0.0f));
 
+        // if (flag_hor == 1)
+        // {
+        //     transform = glm::translate(transform, glm::vec3(-0.4f, 0.0f, 0.0f));
+        //     transform = glm::rotate(transform, glm::radians(45.0f), glm::vec3(0.0, 0.0, 1.0));
+        //     // transform = glm::translate(transform, glm::vec3(0.7f + float(-0.0066 * new_Time_T), y_offset, 0.0f));
+        // }
+        // else
+        // {
         transform = glm::translate(transform, glm::vec3(0.7f + float(-0.0066 * new_Time_T), y_offset, 0.0f));
+        // }
 
         if (-0.0066 * new_Time_T < -3)
         {
-            std::cout << "Entered" << std::endl;
+            // std::cout << "Entered" << std::endl;
             new_Time_T = 0;
-            x_offset = (float)rand()*0.3f/RAND_MAX;
-            y_offset = (float)rand()*0.7f/RAND_MAX - 0.35f;
-            std::cout << "x_offset" << x_offset << std::endl;
-            std::cout << "y_offset" << y_offset << std::endl;
+            x_offset = (float)rand() * 0.3f / RAND_MAX;
+            y_offset = (float)rand() * 0.7f / RAND_MAX - 0.35f;
+            // std::cout << "x_offset" << x_offset << std::endl;
+            // std::cout << "y_offset" << y_offset << std::endl;
+            if (y_offset < 0)
+            {
+                // std::cout << "Horizontal Spawn" << std::endl;
+                // Make Horizontal equal to 1 -> That is The Current Zapper is going to be rotated by 90 degrees
+                flag_hor = 1;
+            }
+            else
+            {
+                flag_hor = 0;
+            }
         }
 
         // /*Physics Engine -> End*/------------------------------------------------------------------
         bind_transformation(&ourShader);
         render_Zapper();
         // /*Rendering Zappers*/---
+
+        CollisionDetection();
 
         /*Reset all the transformations to originals -------------------------------------------*/
         transform = glm::mat4(1.0f);
@@ -131,7 +155,7 @@ void processInput(GLFWwindow *window)
         jet = 1;
         up_ticks++;
         down_ticks = 0;
-        std::cout << "Up Ticks: " << up_ticks << std::endl;
+        // std::cout << "Up Ticks: " << up_ticks << std::endl;
     }
     else
     {

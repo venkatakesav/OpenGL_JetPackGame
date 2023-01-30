@@ -111,7 +111,7 @@ void ChangeBackGround()
     {
         if (level != 2)
         {
-            std::cout << "Count - 2" << std::endl;
+            // std::cout << "Count - 2" << std::endl;
             glGenTextures(1, &texture);
             glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
             // set the texture wrapping parameters
@@ -144,7 +144,7 @@ void ChangeBackGround()
     {
         if (level != 3)
         {
-            std::cout << "Count - 4" << std::endl;
+            // std::cout << "Count - 4" << std::endl;
             glGenTextures(1, &texture);
             glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
             // set the texture wrapping parameters
