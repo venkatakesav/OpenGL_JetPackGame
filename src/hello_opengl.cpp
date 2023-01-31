@@ -13,11 +13,14 @@
 
 float x_offset = 0;
 float y_offset = 0;
+float x_offset_c = 0;
+float y_offset_c = 0;
 int flag_hor = 0;
 
 #include "./components/background/background.cpp"
 #include "./components/character/character.cpp"
 #include "./components/zappers/zappers.cpp"
+#include "./components/coins/coins.cpp"
 #include "./collission.cpp"
 
 // void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -40,6 +43,7 @@ int main()
     back_init();
     character_init();
     zappers_init();
+    coins_init();
 
     // render loop
     // ----------- For Level -1 ------------
@@ -82,15 +86,23 @@ int main()
         // transform = glm::translate(transform, glm::vec3(0.0f, in_el, 0.0f));
         // std::cout << "Elevation is " << in_el << std::endl;
         // /*Physics Engine -> End*/------------------------------------------------------------------
-
+        ourShader.use();
         Zapper_Setup();
         bind_transformation(&ourShader);
         render_Zapper();
         // /*Rendering Zappers Complete*/---
         // /*Rendering Zappers Complete*/---------------------------------------------------------
 
+        transform = glm::mat4(1.0f);
+        transform = glm::translate(transform, glm::vec3(1.8f + float(-0.0066 * new_Time_T) + x_offset_c, y_offset_c, 0.0f));
 
-        //Collision Detection For Both Zappers and Coins
+        glBindTexture(GL_TEXTURE_2D, texture_3);
+        ourShader.use();
+        bind_transformation(&ourShader);
+        glBindVertexArray(VAO_3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        // Collision Detection For Both Zappers and Coins
         CollisionDetection();
 
         /*Reset all the transformations to originals -------------------------------------------*/

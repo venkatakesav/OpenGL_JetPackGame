@@ -90,6 +90,8 @@ void Zapper_Setup()
         y_offset = (float)rand() * 0.7f / RAND_MAX - 0.35f;
         // std::cout << "x_offset" << x_offset << std::endl;
         // std::cout << "y_offset" << y_offset << std::endl;
+        x_offset_c = (float)rand() * 1.0f / RAND_MAX;
+        y_offset_c = (float)rand() * 0.9f / RAND_MAX - 0.45f;
         if (y_offset < 0)
         {
             // std::cout << "Horizontal Spawn" << std::endl;

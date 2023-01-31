@@ -13,10 +13,10 @@
 
 float vertices_3[] = {
     // Position (x, y, z)  //Colors (arbitrary)  //Textures(x, y)
-    0.455f, 0.500f , 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-    0.455f, -0.500f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-    0.345f, -0.500f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-    0.345f, 0.500f , 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
+    0.1f, 0.10f , 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+    0.1f, -0.10f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+    -0.1f, -0.10f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    -0.1f, 0.10f , 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
 unsigned int indices_3[] = {
     0, 1, 3, // second triangle
     1, 2, 3  // first triangle
@@ -62,7 +62,7 @@ void coins_init(){
     // load image, create texture and generate mipmaps
     // int width, height, nrChannels;
     char path_3[100];
-    strcpy(path_3, "src/components/coins/coins.png");
+    strcpy(path_3, "src/components/coins/coins_bg.png");
     // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
     unsigned char *data_3 = stbi_load(path_3, &width, &height, &nrChannels, 0);
     if (data_3)
@@ -77,10 +77,3 @@ void coins_init(){
     stbi_image_free(data_3);
 }
 
-void render_coins()
-{
-    glBindTexture(GL_TEXTURE_2D, texture_3);
-
-    glBindVertexArray(VAO_3);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-}
