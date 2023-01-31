@@ -17,6 +17,8 @@ float x_offset_c = 0;
 float y_offset_c = 0;
 float new_Time_T_C = 0;
 
+int flag_pop = 0;
+
 int flag_hor = 0;
 
 #include "./components/background/background.cpp"
@@ -96,12 +98,24 @@ int main()
         // /*Rendering Zappers Complete*/---------------------------------------------------------
 
         transform = glm::mat4(1.0f);
+
+        if (flag_pop == 1)
+        {
+            transform = glm::translate(transform, glm::vec3(-10.0f, 0, 0));
+        }
         transform = glm::translate(transform, glm::vec3(1.3f + float(-0.0066 * new_Time_T_C) + x_offset_c, y_offset_c, 0.0f));
 
-        //If Collision Happens Set Flag to 1 -> Whenever Flag = 1 -> Render -2.0 + Current Coordinates
-        //Then No Possibility of it showing and whenever -0.0066*new_Time_T_C is less than -3 (Re-Rendering)
-        //Set Flag to 1
-
+        // If Collision Happens Set Flag to 1 -> Whenever Flag = 1 -> Render -2.0 + Current Coordinates
+        // Then No Possibility of it showing and whenever -0.0066*new_Time_T_C is less than -3 (Re-Rendering)
+        // Set Flag to 1
+        if (CollisionOccured_C == 1)
+        {
+            if (flag_pop != 1)
+            {
+                flag_pop = 1;
+                std::cout << "flag_pop: set" << std::endl;
+            }
+        }
 
         if (-0.0066 * new_Time_T_C < -3.0)
         {
@@ -121,6 +135,8 @@ int main()
             {
                 flag_hor = 0;
             }
+            flag_pop = 0;
+            std::cout << "flag_pop: reset" << std::endl;
         }
 
         glBindTexture(GL_TEXTURE_2D, texture_3);
