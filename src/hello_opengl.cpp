@@ -109,7 +109,7 @@ int main()
             new_Time_T_C = 0;
             x_offset_c = (float)rand() * 0.6f / RAND_MAX;
             y_offset_c = (float)rand() * 1.4f / RAND_MAX - 0.70f;
-            std::cout << "x_offset" << x_offset_c << std::endl;
+            // std::cout << "x_offset" << x_offset_c << std::endl;
             // std::cout << "y_offset" << y_offset << std::endl;
             if (y_offset_c < 0)
             {
