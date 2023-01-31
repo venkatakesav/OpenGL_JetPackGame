@@ -98,6 +98,11 @@ int main()
         transform = glm::mat4(1.0f);
         transform = glm::translate(transform, glm::vec3(1.3f + float(-0.0066 * new_Time_T_C) + x_offset_c, y_offset_c, 0.0f));
 
+        //If Collision Happens Set Flag to 1 -> Whenever Flag = 1 -> Render -2.0 + Current Coordinates
+        //Then No Possibility of it showing and whenever -0.0066*new_Time_T_C is less than -3 (Re-Rendering)
+        //Set Flag to 1
+
+
         if (-0.0066 * new_Time_T_C < -3.0)
         {
             // std::cout << "Entered" << std::endl;
