@@ -15,6 +15,8 @@ float x_offset = 0;
 float y_offset = 0;
 float x_offset_c = 0;
 float y_offset_c = 0;
+float new_Time_T_C = 0;
+
 int flag_hor = 0;
 
 #include "./components/background/background.cpp"
@@ -94,7 +96,27 @@ int main()
         // /*Rendering Zappers Complete*/---------------------------------------------------------
 
         transform = glm::mat4(1.0f);
-        transform = glm::translate(transform, glm::vec3(1.8f + float(-0.0066 * new_Time_T) + x_offset_c, y_offset_c, 0.0f));
+        transform = glm::translate(transform, glm::vec3(1.3f + float(-0.0066 * new_Time_T_C) + x_offset_c, y_offset_c, 0.0f));
+
+        if (-0.0066 * new_Time_T_C < -3.0)
+        {
+            // std::cout << "Entered" << std::endl;
+            new_Time_T_C = 0;
+            x_offset_c = (float)rand() * 0.6f / RAND_MAX;
+            y_offset_c = (float)rand() * 1.4f / RAND_MAX - 0.70f;
+            std::cout << "x_offset" << x_offset_c << std::endl;
+            // std::cout << "y_offset" << y_offset << std::endl;
+            if (y_offset_c < 0)
+            {
+                // std::cout << "Horizontal Spawn" << std::endl;
+                // Make Horizontal equal to 1 -> That is The Current Zapper is going to be rotated by 90 degrees
+                flag_hor = 1;
+            }
+            else
+            {
+                flag_hor = 0;
+            }
+        }
 
         glBindTexture(GL_TEXTURE_2D, texture_3);
         ourShader.use();
