@@ -18,8 +18,10 @@ float y_offset_c = 0;
 float new_Time_T_C = 0;
 
 int flag_pop = 0;
-
+int GameOver = 0; // Whenever GameOver = 100 -> End Game
 int flag_hor = 0;
+
+int Total_Length = 0; 
 
 #include "./components/background/background.cpp"
 #include "./components/character/character.cpp"
@@ -173,7 +175,7 @@ int main()
 
     // render loop
     // ----------- For Level -1 ------------
-    while (!glfwWindowShouldClose(window) && count < 100)
+    while (!glfwWindowShouldClose(window) && count < 100 && GameOver < 15)
     {
         // Initially Pressed or not ->
         // input
@@ -278,8 +280,32 @@ int main()
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        // RenderText(shader, "Tutorial 2", 400.0f, 400.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
-        RenderText(shader, "Welcome to CG Course", 50.0f, 50.0f, 3.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        // Update Coins ->
+
+        std::string Level = "Level is ";
+        std::string level_no = std::to_string(level);
+        Level = Level + level_no;
+
+        std::string Header = "Dist: ";
+        std::string Distance = std::to_string(Total_Length/10);
+        Header = Header + Distance;
+
+        std::string Header_Bot = " Coins: ";
+        std::string Coins = std::to_string(Collisions_C*8);
+        Header_Bot = Header_Bot + Coins;
+
+        Header = Header + Header_Bot; 
+
+        RenderText(shader, Level, 2200.0f, 700.0f, 1.0f, glm::vec3(0.3, 0.7f, 0.9f));
+        RenderText(shader, Header, 50.0f, 50.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+
+        if (CollisionOccured == 1)
+        {
+            RenderText(shader, "Game Over!!!", 700.0f, 350.0f, 5.0f, glm::vec3(0.5, 0.8f, 0.2f));
+            GameOver++;
+        }
+
+        // std::cout << GameOver << std::endl;
 
         glDisable(GL_CULL_FACE);
         glDisable(GL_BLEND);
