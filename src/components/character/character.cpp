@@ -13,10 +13,10 @@
 
 float vertices_1[] = {
     // Position (x, y, z)  //Colors (arbitrary)  //Textures(x, y)
-    -0.80f, -0.60f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-    -0.80f, -0.93f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-    -0.90f, -0.93f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-    -0.90f, -0.60f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
+    -0.80f, -0.60f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+    -0.80f, -0.93f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+    -0.90f, -0.93f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    -0.90f, -0.60f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 unsigned int indices_1[] = {
     0, 1, 3, // second triangle
     1, 2, 3  // first triangle

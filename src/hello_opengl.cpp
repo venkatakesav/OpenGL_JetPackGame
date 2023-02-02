@@ -21,7 +21,10 @@ int flag_pop = 0;
 int GameOver = 0; // Whenever GameOver = 100 -> End Game
 int flag_hor = 0;
 
-int Total_Length = 0; 
+int Total_Length = 0;
+int ch = 0; 
+int zap = 0; 
+int isGlow = 0; 
 
 #include "./components/background/background.cpp"
 #include "./components/character/character.cpp"
@@ -57,6 +60,19 @@ void processInput(GLFWwindow *window);
 void bind_transformation(Shader *ourShader)
 {
     unsigned int transformLoc = glGetUniformLocation((*ourShader).ID, "transform");
+    unsigned int glowLoc = glGetUniformLocation((*ourShader).ID, "jet_main");
+    if(jet == 1 && ch == 1){
+        isGlow = 1;
+        glUniform1i(glowLoc, isGlow);
+    }  
+    else if(zap == 1){
+        isGlow = 1;
+        glUniform1i(glowLoc, isGlow);     
+    }
+    else{
+        isGlow = 0;
+        glUniform1i(glowLoc, isGlow);
+    }
     glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 }
 
@@ -194,19 +210,20 @@ int main()
 
         // /*Render BackGround Complete*/------------------------------------------------------
         // /*Render Character*/----------------------------------------------------------------
+        ch = 1; 
         transform = glm::mat4(1.0f);
         // /*Physics Engine*/------------------------------------------------------------------
         // std::cout << "JetPack is " << jet << std::endl;
         Physics_Engine();
         transform = glm::translate(transform, glm::vec3(0.0f, in_el, 0.0f));
         // std::cout << "Elevation is " << in_el << std::endl;
-
         // /*Physics Engine -> End*/------------------------------------------------------------------
         bind_transformation(&ourShader);
         render_Img();
         // /*Rendering Character Complete*/----------------------------------------------------------------
 
         // /*Render Zappers*/----------------------------------------------------------------
+        zap = 1; 
         transform = glm::mat4(1.0f);
         // /*Physics Engine*/------------------------------------------------------------------
         // std::cout << "JetPack is " << jet << std::endl;
@@ -218,6 +235,10 @@ int main()
         Zapper_Setup();
         bind_transformation(&ourShader);
         render_Zapper();
+
+        zap = 0; 
+        ch = 0; 
+
         // // /*Rendering Zappers Complete*/---
         // // /*Rendering Zappers Complete*/---------------------------------------------------------
 
@@ -287,21 +308,24 @@ int main()
         Level = Level + level_no;
 
         std::string Header = "Dist: ";
-        std::string Distance = std::to_string(Total_Length/10);
+        std::string Distance = std::to_string(Total_Length / 10);
         Header = Header + Distance;
 
         std::string Header_Bot = " Coins: ";
-        std::string Coins = std::to_string(Collisions_C*8);
+        std::string Coins = std::to_string(Collisions_C * 8);
         Header_Bot = Header_Bot + Coins;
 
-        Header = Header + Header_Bot; 
+        Header = Header + Header_Bot;
 
         RenderText(shader, Level, 2200.0f, 700.0f, 1.0f, glm::vec3(0.3, 0.7f, 0.9f));
         RenderText(shader, Header, 50.0f, 50.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
 
         if (CollisionOccured == 1)
         {
-            RenderText(shader, "Game Over!!!", 700.0f, 350.0f, 5.0f, glm::vec3(0.5, 0.8f, 0.2f));
+            if (GameOver > 10)
+            {
+                RenderText(shader, "Game Over!!!", 700.0f, 350.0f, 5.0f, glm::vec3(0.5, 0.8f, 0.2f));
+            }
             GameOver++;
         }
 
@@ -334,7 +358,7 @@ void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
     {
         // std::cout << "1 Pressed" << std::endl;
         jet = 1;
