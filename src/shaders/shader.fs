@@ -17,7 +17,10 @@ void main()
             discard;
         }
         else{
-            texColor = mix(vec4(1.0, 0.7, 0.0, 1.0), texColor, smoothstep(0.4, 0.6, center));
+            texColor = mix(vec4(1.0, 0.64, 0.0, 0.2), texColor, smoothstep(0.45, 0.55, center));
+            if(texColor.a < 0.1){
+                discard;
+            }
         }
     FragColor = texColor;
 }
